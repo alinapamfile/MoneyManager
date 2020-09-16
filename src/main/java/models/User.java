@@ -1,3 +1,5 @@
+package models;
+
 import utils.PasswordEncrypting;
 
 public class User {
