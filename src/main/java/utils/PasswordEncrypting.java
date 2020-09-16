@@ -13,6 +13,10 @@ public class PasswordEncrypting {
     private static final int KEY_LENGTH = 512;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
 
+    private PasswordEncrypting() {
+
+    }
+
     public static String encryptPassword(String password) {
         KeySpec spec = new PBEKeySpec(password.toCharArray(), generateSalt(), ITERATIONS, KEY_LENGTH);
 
