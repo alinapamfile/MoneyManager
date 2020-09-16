@@ -12,13 +12,14 @@ public class PasswordEncrypting {
     private static final int ITERATIONS = 65536;
     private static final int KEY_LENGTH = 512;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
+    private static final byte[] SALT = generateSalt();
 
     private PasswordEncrypting() {
 
     }
 
     public static String encryptPassword(String password) {
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), generateSalt(), ITERATIONS, KEY_LENGTH);
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), SALT, ITERATIONS, KEY_LENGTH);
 
         try {
             SecretKeyFactory factory = SecretKeyFactory.getInstance(ALGORITHM);
@@ -31,7 +32,14 @@ public class PasswordEncrypting {
             System.err.println("InvalidKeySpecException in encryptPassword()");
             return null;
         }
+    }
 
+    public static boolean verifyPassword(String input, String encryptedPassword) {
+        String encryptedInput = encryptPassword(input);
+        if (encryptedInput != null)
+            return encryptedInput.equals(encryptedPassword);
+        else
+            return false;
     }
 
     private static byte[] generateSalt() {
