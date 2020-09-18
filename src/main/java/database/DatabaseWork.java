@@ -1,25 +1,38 @@
 package database;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
+
+import java.util.Iterator;
+
+import static com.mongodb.client.model.Filters.*;
+
 public class DatabaseWork {
+
     private final static MongoClient mongo = DatabaseConnection.connect();
-    private final static MongoDatabase db = mongo.getDatabase("money-manager");
+    private final static MongoCollection<Document> db = mongo.getDatabase("money-manager").getCollection("users");
     private static String userEmail;
 
     private DatabaseWork() {}
 
-    //TODO: check if user exists already in the database
     public static boolean addUser(String firstname, String lastname, String email, String password) {
+        userEmail = email;
+
+        FindIterable<Document> foundUsers = db.find(eq("email", userEmail));
+        Iterator<Document> iterator = foundUsers.iterator();
+        if (iterator.hasNext()) {
+            return false;
+        }
+
         Document user = new Document("firstName", firstname)
                 .append("lastName", lastname)
                 .append("email", email)
                 .append("password", password)
                 .append("accounts", null);
-        db.getCollection("users").insertOne(user);
-        userEmail = email;
+        db.insertOne(user);
 
         return true;
     }
