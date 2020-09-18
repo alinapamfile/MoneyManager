@@ -1,13 +1,12 @@
-package utils;
-
-import org.bson.Document;
+import database.DatabaseWork;
+import utils.PasswordEncrypting;
+import utils.ValidInput;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UserInteraction {
     private static final Scanner scanner = new Scanner(System.in);
-    private static Document user;
 
     private UserInteraction() {}
 
@@ -61,9 +60,13 @@ public class UserInteraction {
 
         password = PasswordEncrypting.encryptPassword(password);
 
-        user = DatabaseWork.addUser(firstName, lastName, email, password);
-
-        run();
+        if (DatabaseWork.addUser(firstName, lastName, email, password)) {
+            System.out.println("\nYour account has been registered!");
+            run();
+        } else {
+            System.out.println("\nUser already exists! Please try again.\n");
+            register();
+        }
     }
 
     //TODO
@@ -73,24 +76,30 @@ public class UserInteraction {
 
     //TODO
     public static void run() {
-        System.out.printf("\nWelcome, %s!\n", user.get("firstName"));
-
         while (true) {
             System.out.println("Please enter a number to choose an option:");
-            System.out.println("1. Check all accounts balances.\n" +
-                    "2. Check account balance.\n" +
-                    "3. Check total balance.\n" +
-                    "4. Logout.\n"
+            System.out.println("1. Check accounts balance.\n" +
+                    "2. Check total balance.\n" +
+                    "3. Register an expense.\n" +
+                    "4. Register an income.\n" +
+                    "5. Add a bank account.\n" +
+                    "6. Delete a bank account.\n" +
+                    "7. Delete your MoneyManager account.\n" +
+                    "8. Logout.\n"
             );
 
             //temporary functionality
             do {
                 int option = scanner.nextInt();
                 switch(option) {
-                    case 1 : System.out.println("option 1"); break;
+                    case 1 : DatabaseWork.accountsBalance(); break;
                     case 2 : System.out.println("option 2"); break;
                     case 3 : System.out.println("option 3"); break;
-                    case 4 : exit();
+                    case 4 : System.out.println("option 4"); break;
+                    case 5 : System.out.println("option 5"); break;
+                    case 6 : System.out.println("option 6"); break;
+                    case 7 : System.out.println("option 7"); break;
+                    case 8 : exit();
                 }
             } while(true);
         }
