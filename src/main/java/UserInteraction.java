@@ -62,7 +62,7 @@ public class UserInteraction {
         password = PasswordEncrypting.encryptPassword(password);
 
         user = DatabaseWork.addUser(firstName, lastName, email, password);
-        System.out.printf("\nWelcome, %s!\n", firstName);
+
         run();
     }
 
@@ -73,6 +73,8 @@ public class UserInteraction {
 
     //TODO
     public static void run() {
+        System.out.printf("\nWelcome, %s!\n", user.get("firstName"));
+
         while (true) {
             System.out.println("Please enter a number to choose an option:");
             System.out.println("1. Check all accounts balances.\n" +

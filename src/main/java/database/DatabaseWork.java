@@ -15,7 +15,8 @@ public class DatabaseWork {
         Document user = new Document("firstName", firstname)
                 .append("lastName", lastname)
                 .append("email", email)
-                .append("password", password);
+                .append("password", password)
+                .append("accounts", null);
         db.getCollection("users").insertOne(user);
 
         return user;
