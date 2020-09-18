@@ -1,4 +1,4 @@
-package database;
+package utils;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
