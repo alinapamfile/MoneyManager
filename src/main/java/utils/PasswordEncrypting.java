@@ -3,7 +3,6 @@ package utils;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
@@ -12,8 +11,7 @@ public class PasswordEncrypting {
     private static final int ITERATIONS = 65536;
     private static final int KEY_LENGTH = 512;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
-    private static final byte[] SALT = generateSalt();
-
+    private static final byte[] SALT = {15,5,3,46,23,5,43,127,3,14};
     private PasswordEncrypting() {
 
     }
@@ -40,12 +38,5 @@ public class PasswordEncrypting {
             return encryptedInput.equals(encryptedPassword);
         else
             return false;
-    }
-
-    private static byte[] generateSalt() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] salt = new byte[16];
-        secureRandom.nextBytes(salt);
-        return salt;
     }
 }
