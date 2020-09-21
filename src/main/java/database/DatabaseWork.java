@@ -50,8 +50,21 @@ public class DatabaseWork {
         return false;
     }
 
-    //TODO
-    public static void accountsBalance() {}
+    public static void accountsBalance() {
+        Document user = findUser();
+        assert user != null;
+        Document accounts = (Document) user.get("accounts");
+
+        double balance = 0;
+
+        if (accounts != null) {
+            for (String key : accounts.keySet()) {
+                balance += (Double) accounts.get(key);
+            }
+        }
+
+        System.out.printf("Your accounts balance is %f RON", balance);
+    }
 
     //TODO
     public static void totalBalance() {}
