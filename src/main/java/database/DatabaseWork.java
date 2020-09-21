@@ -5,7 +5,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
-import java.util.Iterator;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.*;
 
@@ -19,8 +19,13 @@ public class DatabaseWork {
     public static Document findUser() {
         MongoCollection<Document> db = mongo.getDatabase("money-manager").getCollection("users");
         FindIterable<Document> usersFound = db.find(eq("email", userEmail));
+
         Iterator<Document> iterator = usersFound.iterator();
-        return iterator.next();
+        if (iterator.hasNext()) {
+            return iterator.next();
+        } else {
+            return null;
+        }
     }
 
     public static boolean addUser(String firstname, String lastname, String email, String password) {
@@ -36,7 +41,6 @@ public class DatabaseWork {
                 .append("password", password)
                 .append("accounts", null);
         mongo.getDatabase("money-manager").getCollection("users").insertOne(user);
-
         return true;
     }
 
