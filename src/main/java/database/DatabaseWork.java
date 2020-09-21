@@ -39,7 +39,8 @@ public class DatabaseWork {
                 .append("lastName", lastname)
                 .append("email", email)
                 .append("password", password)
-                .append("accounts", null);
+                .append("accounts", new Document());
+
         mongo.getDatabase("money-manager").getCollection("users").insertOne(user);
         return true;
     }
