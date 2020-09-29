@@ -2,11 +2,13 @@ import database.DatabaseWork;
 import utils.PasswordEncrypting;
 import utils.ValidInput;
 
+import org.bson.Document;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class UserInteraction {
     private static final Scanner scanner = new Scanner(System.in);
+    private static String userEmail;
 
     private UserInteraction() {}
 
@@ -62,6 +64,7 @@ public class UserInteraction {
 
         if (DatabaseWork.addUser(firstName, lastName, email, password)) {
             System.out.println("\nYour account has been registered!");
+            userEmail = email;
             run();
         } else {
             System.out.println("\nUser already exists! Please try again.\n");
@@ -69,9 +72,27 @@ public class UserInteraction {
         }
     }
 
-    //TODO
     public static void login() {
-        System.exit(0);
+        System.out.println("Enter your email:");
+        String email = scanner.next();
+
+        System.out.println("Enter a password:");
+        String password = scanner.next();
+
+        Document user = DatabaseWork.findUser(email);
+        if (user == null) {
+            System.out.println("User doesn't exist. Try again.\n");
+            login();
+        } else {
+            if (PasswordEncrypting.verifyPassword(password, (String) user.get("password"))) {
+                System.out.println("\nSuccessfully logged in!");
+                userEmail = email;
+                run();
+            } else {
+                System.out.println("Wrong password. Try again.\n");
+                login();
+            }
+        }
     }
 
     //TODO
@@ -89,19 +110,17 @@ public class UserInteraction {
             );
 
             //temporary functionality
-            do {
-                int option = scanner.nextInt();
-                switch(option) {
-                    case 1 : DatabaseWork.accountsBalance(); break;
-                    case 2 : System.out.println("option 2"); break;
-                    case 3 : System.out.println("option 3"); break;
-                    case 4 : System.out.println("option 4"); break;
-                    case 5 : System.out.println("option 5"); break;
-                    case 6 : System.out.println("option 6"); break;
-                    case 7 : System.out.println("option 7"); break;
-                    case 8 : exit();
-                }
-            } while(true);
+            int option = scanner.nextInt();
+            switch (option) {
+                case 1 -> DatabaseWork.accountsBalance(userEmail);
+                case 2 -> System.out.println("option 2");
+                case 3 -> System.out.println("option 3");
+                case 4 -> System.out.println("option 4");
+                case 5 -> System.out.println("option 5");
+                case 6 -> System.out.println("option 6");
+                case 7 -> System.out.println("option 7");
+                case 8 -> exit();
+            }
         }
     }
 
