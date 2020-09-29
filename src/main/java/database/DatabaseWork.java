@@ -12,13 +12,12 @@ import static com.mongodb.client.model.Filters.*;
 public class DatabaseWork {
 
     private final static MongoClient mongo = DatabaseConnection.connect();
-    private static String userEmail;
 
     private DatabaseWork() {}
 
-    public static Document findUser() {
+    public static Document findUser(String email) {
         MongoCollection<Document> db = mongo.getDatabase("money-manager").getCollection("users");
-        FindIterable<Document> usersFound = db.find(eq("email", userEmail));
+        FindIterable<Document> usersFound = db.find(eq("email", email));
 
         Iterator<Document> iterator = usersFound.iterator();
         if (iterator.hasNext()) {
@@ -29,9 +28,7 @@ public class DatabaseWork {
     }
 
     public static boolean addUser(String firstname, String lastname, String email, String password) {
-        userEmail = email;
-
-        if (findUser() != null) {
+        if (findUser(email) != null) {
             return false;
         }
 
@@ -46,12 +43,12 @@ public class DatabaseWork {
     }
 
     //TODO
-    public static boolean deleteUser() {
+    public static boolean deleteUser(String userEmail) {
         return false;
     }
 
-    public static void accountsBalance() {
-        Document user = findUser();
+    public static void accountsBalance(String userEmail) {
+        Document user = findUser(userEmail);
         assert user != null;
         Document accounts = (Document) user.get("accounts");
 
@@ -63,21 +60,21 @@ public class DatabaseWork {
             }
         }
 
-        System.out.printf("Your accounts balance is %f RON", balance);
+        System.out.printf("Your accounts balance is %f RON\n\n", balance);
     }
 
     //TODO
-    public static void totalBalance() {}
+    public static void totalBalance(String userEmail) {}
 
     //TODO
-    public static boolean registerExpense(String accountName, double amount) { return false; }
+    public static boolean registerExpense(String userEmail, String accountName, double amount) { return false; }
 
     //TODO
-    public static boolean registerDeposit(String accountName, double amount) { return false; }
+    public static boolean registerDeposit(String userEmail, String accountName, double amount) { return false; }
 
     //TODO
-    public static boolean addBankAccount(Document bankAccount) { return false; }
+    public static boolean addBankAccount(String userEmail, Document bankAccount) { return false; }
 
     //TODO
-    public static boolean deleteBankAccount(String accountName) { return false; }
+    public static boolean deleteBankAccount(String userEmail, String accountName) { return false; }
 }
