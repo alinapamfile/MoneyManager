@@ -47,8 +47,20 @@ public class DatabaseWork {
         return false;
     }
 
-    //TODO
-    public static void accountsBalance(String userEmail) {}
+    public static void accountsBalance(String userEmail) {
+        Document user = findUser(userEmail);
+        assert user != null;
+        Document accounts = (Document) user.get("accounts");
+
+        System.out.println();
+        if (!accounts.isEmpty()) {
+            for (String key : accounts.keySet()) {
+                System.out.printf("%s: %f", key, (Double) accounts.get(key));
+            }
+        } else {
+            System.out.println("You don't have any accounts open yet.");
+        }
+    }
 
     public static void totalBalance(String userEmail) {
         Document user = findUser(userEmail);
