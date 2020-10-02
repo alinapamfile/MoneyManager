@@ -98,6 +98,7 @@ public class UserInteraction {
     //TODO
     public static void run() {
         while (true) {
+            sleep(1);
             System.out.println("Please enter a number to choose an option:");
             System.out.println("1. Check accounts balance.\n" +
                     "2. Check total balance.\n" +
@@ -112,8 +113,8 @@ public class UserInteraction {
             //temporary functionality
             int option = scanner.nextInt();
             switch (option) {
-                case 1 -> DatabaseWork.accountsBalance(userEmail);
-                case 2 -> System.out.println("option 2");
+                case 1 -> System.out.println("option 1");
+                case 2 -> DatabaseWork.totalBalance(userEmail);
                 case 3 -> System.out.println("option 3");
                 case 4 -> System.out.println("option 4");
                 case 5 -> System.out.println("option 5");
