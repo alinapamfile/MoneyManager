@@ -47,7 +47,10 @@ public class DatabaseWork {
         return false;
     }
 
-    public static void accountsBalance(String userEmail) {
+    //TODO
+    public static void accountsBalance(String userEmail) {}
+
+    public static void totalBalance(String userEmail) {
         Document user = findUser(userEmail);
         assert user != null;
         Document accounts = (Document) user.get("accounts");
@@ -60,11 +63,8 @@ public class DatabaseWork {
             }
         }
 
-        System.out.printf("Your accounts balance is %f RON\n\n", balance);
+        System.out.printf("Your total balance is %f RON\n\n", balance);
     }
-
-    //TODO
-    public static void totalBalance(String userEmail) {}
 
     //TODO
     public static boolean registerExpense(String userEmail, String accountName, double amount) { return false; }
