@@ -21,7 +21,7 @@ public class UserInteraction {
         userEmail = Authentication.userEmail;
 
         while (true) {
-            sleep(1);
+            sleep(2);
             System.out.println("\nPlease enter a number to choose an option:");
             System.out.println("\n1. Check accounts balance.\n" +
                     "2. Check total balance.\n" +
@@ -38,7 +38,13 @@ public class UserInteraction {
             switch (option) {
                 case 1 -> DatabaseWork.accountsBalance(userEmail);
                 case 2 -> DatabaseWork.totalBalance(userEmail);
-                case 3 -> System.out.println("option 3");
+                case 3 -> {
+                    System.out.println("Enter the name of the bank account:");
+                    String accountName = scanner.next();
+                    System.out.println("Enter the amount of money spent:");
+                    double amount = scanner.nextDouble();
+                    DatabaseWork.registerExpense(userEmail, accountName, amount);
+                }
                 case 4 -> System.out.println("option 4");
                 case 5 -> {
                     System.out.println("Enter the name of the new bank account:");
