@@ -8,10 +8,13 @@ import utils.ValidInput;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class Auth {
+public class Authentication {
     private static final Scanner scanner = new Scanner(System.in);
-    private static String userEmail;
-    public static void authentication() {
+    static String userEmail;
+
+    private Authentication() {}
+
+    static void auth() {
         System.out.println("Please enter a number to choose an option:");
         System.out.println("1. Create a new account.\n2. Log into your account.\n");
 
@@ -28,7 +31,7 @@ public class Auth {
         } while(true);
     }
 
-    public static void register() {
+    private static void register() {
         System.out.println("Enter your firstname:");
         String firstName = scanner.next();
 
@@ -65,7 +68,7 @@ public class Auth {
         }
     }
 
-    public static void login() {
+    private static void login() {
         System.out.println("Enter your email:");
         String email = scanner.next();
 
