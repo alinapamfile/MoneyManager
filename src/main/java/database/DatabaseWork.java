@@ -61,7 +61,7 @@ public class DatabaseWork {
                 System.out.printf("%s: %f\n", key, (Double) accounts.get(key));
             }
         } else {
-            System.out.println("You don't have any accounts open yet.");
+            System.out.println("You don't have any bank accounts open yet.");
         }
     }
 
@@ -81,8 +81,31 @@ public class DatabaseWork {
         System.out.printf("Your total balance is %f RON\n\n", balance);
     }
 
-    //TODO
-    public static boolean registerExpense(String userEmail, String accountName, double amount) { return false; }
+    public static void registerExpense(String userEmail, String accountName, double amount) {
+        Document user = findUser(userEmail);
+        assert user != null;
+
+        Document accounts = (Document) user.get("accounts");
+
+        if (!accounts.containsKey(accountName)) {
+            System.out.printf("\nBank account %s doesn't exist.\n", accountName);
+            return;
+        }
+
+        double currentBalance = accounts.getDouble(accountName);
+        if (currentBalance >= amount) {
+            accounts.replace(accountName, currentBalance, currentBalance - amount);
+            mongo.getDatabase("money-manager")
+                    .getCollection("users")
+                    .updateOne(eq("email", userEmail), set("accounts", accounts));
+
+            System.out.printf("%f RON were withdrawn from %s account. Current balance: %f.\n",
+                    amount, accountName, currentBalance - amount);
+        } else {
+            System.out.printf("Bank account %s has less than %f RON. Bank account %1$s balance is %f RON.\n",
+                    accountName, amount, currentBalance);
+        }
+    }
 
     //TODO
     public static boolean registerDeposit(String userEmail, String accountName, double amount) { return false; }
@@ -92,13 +115,19 @@ public class DatabaseWork {
         assert user != null;
 
         Document accounts = (Document) user.get("accounts");
+
+        if (accounts.containsKey(accountName)) {
+            System.out.printf("Bank account %s already exists.\n", accountName);
+            return;
+        }
+
         accounts.append(accountName, amount);
 
         mongo.getDatabase("money-manager")
                 .getCollection("users")
                 .updateOne(eq("email", userEmail), set("accounts", accounts));
 
-        System.out.printf("\nAccount %s with the amount of %f RON added successfully.\n", accountName, amount);
+        System.out.printf("\nBank account %s with the amount of %f RON added successfully.\n", accountName, amount);
     }
 
     //TODO
