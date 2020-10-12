@@ -45,7 +45,13 @@ public class UserInteraction {
                     double amount = scanner.nextDouble();
                     DatabaseWork.registerExpense(userEmail, accountName, amount);
                 }
-                case 4 -> System.out.println("option 4");
+                case 4 -> {
+                    System.out.println("Enter the name of the bank account:");
+                    String accountName = scanner.next();
+                    System.out.println("Enter the amount of money deposited:");
+                    double amount = scanner.nextDouble();
+                    DatabaseWork.registerDeposit(userEmail, accountName, amount);
+                }
                 case 5 -> {
                     System.out.println("Enter the name of the new bank account:");
                     String accountName = scanner.next();
