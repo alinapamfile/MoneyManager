@@ -14,15 +14,16 @@ public class UserInteraction {
         System.out.println("Welcome to MoneyManager!\n");
         sleep(1);
         Authentication.auth();
-        userEmail = Authentication.userEmail;
     }
 
     //TODO
     static void run() {
+        userEmail = Authentication.userEmail;
+
         while (true) {
             sleep(1);
             System.out.println("\nPlease enter a number to choose an option:");
-            System.out.println("1. Check accounts balance.\n" +
+            System.out.println("\n1. Check accounts balance.\n" +
                     "2. Check total balance.\n" +
                     "3. Register an expense.\n" +
                     "4. Register an income.\n" +
@@ -41,7 +42,7 @@ public class UserInteraction {
                 case 4 -> System.out.println("option 4");
                 case 5 -> {
                     System.out.println("Enter the name of the new bank account:");
-                    String accountName = scanner.nextLine();
+                    String accountName = scanner.next();
                     System.out.println("Enter the initial amount of money in the new bank account:");
                     double amount = scanner.nextDouble();
                     DatabaseWork.addBankAccount(userEmail, accountName, amount);
