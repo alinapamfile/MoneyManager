@@ -1,23 +1,16 @@
+package user;
+
 import database.DatabaseWork;
+import org.bson.Document;
 import utils.PasswordEncrypting;
 import utils.ValidInput;
 
-import org.bson.Document;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class UserInteraction {
+public class Auth {
     private static final Scanner scanner = new Scanner(System.in);
     private static String userEmail;
-
-    private UserInteraction() {}
-
-    public static void start() {
-        System.out.println("Welcome to MoneyManager!\n");
-        sleep(1);
-        authentication();
-    }
-
     public static void authentication() {
         System.out.println("Please enter a number to choose an option:");
         System.out.println("1. Create a new account.\n2. Log into your account.\n");
@@ -65,7 +58,7 @@ public class UserInteraction {
         if (DatabaseWork.addUser(firstName, lastName, email, password)) {
             System.out.println("\nYour account has been registered!");
             userEmail = email;
-            run();
+            UserInteraction.run();
         } else {
             System.out.println("\nUser already exists! Please try again.\n");
             register();
@@ -87,54 +80,11 @@ public class UserInteraction {
             if (PasswordEncrypting.verifyPassword(password, (String) user.get("password"))) {
                 System.out.println("\nSuccessfully logged in!");
                 userEmail = email;
-                run();
+                UserInteraction.run();
             } else {
                 System.out.println("Wrong password. Try again.\n");
                 login();
             }
         }
-    }
-
-    //TODO
-    public static void run() {
-        while (true) {
-            sleep(1);
-            System.out.println("\nPlease enter a number to choose an option:");
-            System.out.println("1. Check accounts balance.\n" +
-                    "2. Check total balance.\n" +
-                    "3. Register an expense.\n" +
-                    "4. Register an income.\n" +
-                    "5. Add a bank account.\n" +
-                    "6. Delete a bank account.\n" +
-                    "7. Delete your MoneyManager account.\n" +
-                    "8. Logout.\n"
-            );
-
-            //temporary functionality
-            int option = scanner.nextInt();
-            switch (option) {
-                case 1 -> DatabaseWork.accountsBalance(userEmail);
-                case 2 -> DatabaseWork.totalBalance(userEmail);
-                case 3 -> System.out.println("option 3");
-                case 4 -> System.out.println("option 4");
-                case 5 -> System.out.println("option 5");
-                case 6 -> System.out.println("option 6");
-                case 7 -> System.out.println("option 7");
-                case 8 -> exit();
-            }
-        }
-    }
-
-    public static void sleep(int seconds) {
-        try {
-            Thread.sleep((int)seconds * 1000);
-        } catch (InterruptedException e) {
-            System.err.println("InterruptedException in sleep()");
-        }
-    }
-
-    public static void exit() {
-        System.out.println("\nHope to see you back soon!");
-        System.exit(0);
     }
 }
