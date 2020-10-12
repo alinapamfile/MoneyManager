@@ -107,8 +107,26 @@ public class DatabaseWork {
         }
     }
 
-    //TODO
-    public static boolean registerDeposit(String userEmail, String accountName, double amount) { return false; }
+    public static void registerDeposit(String userEmail, String accountName, double amount) {
+        Document user = findUser(userEmail);
+        assert user != null;
+
+        Document accounts = (Document) user.get("accounts");
+
+        if (!accounts.containsKey(accountName)) {
+            System.out.printf("\nBank account %s doesn't exist.\n", accountName);
+            return;
+        }
+
+        double currentBalance = accounts.getDouble(accountName);
+        accounts.replace(accountName, currentBalance, currentBalance + amount);
+        mongo.getDatabase("money-manager")
+                .getCollection("users")
+                .updateOne(eq("email", userEmail), set("accounts", accounts));
+
+        System.out.printf("%f RON were deposited in %s account. Current balance: %f.\n",
+                    amount, accountName, currentBalance + amount);
+    }
 
     public static void addBankAccount(String userEmail, String accountName, double amount) {
         Document user = findUser(userEmail);
