@@ -8,6 +8,7 @@ import org.bson.Document;
 import java.util.*;
 
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.*;
 
 public class DatabaseWork {
 
@@ -38,7 +39,9 @@ public class DatabaseWork {
                 .append("password", password)
                 .append("accounts", new Document());
 
-        mongo.getDatabase("money-manager").getCollection("users").insertOne(user);
+        mongo.getDatabase("money-manager")
+                .getCollection("users")
+                .insertOne(user);
         return true;
     }
 
@@ -55,7 +58,7 @@ public class DatabaseWork {
         System.out.println();
         if (!accounts.isEmpty()) {
             for (String key : accounts.keySet()) {
-                System.out.printf("%s: %f", key, (Double) accounts.get(key));
+                System.out.printf("%s: %f\n", key, (Double) accounts.get(key));
             }
         } else {
             System.out.println("You don't have any accounts open yet.");
@@ -84,8 +87,19 @@ public class DatabaseWork {
     //TODO
     public static boolean registerDeposit(String userEmail, String accountName, double amount) { return false; }
 
-    //TODO
-    public static boolean addBankAccount(String userEmail, Document bankAccount) { return false; }
+    public static void addBankAccount(String userEmail, String accountName, double amount) {
+        Document user = findUser(userEmail);
+        assert user != null;
+
+        Document accounts = (Document) user.get("accounts");
+        accounts.append(accountName, amount);
+
+        mongo.getDatabase("money-manager")
+                .getCollection("users")
+                .updateOne(eq("email", userEmail), set("accounts", accounts));
+
+        System.out.printf("\nAccount %s with the amount of %f RON added successfully.\n", accountName, amount);
+    }
 
     //TODO
     public static boolean deleteBankAccount(String userEmail, String accountName) { return false; }
