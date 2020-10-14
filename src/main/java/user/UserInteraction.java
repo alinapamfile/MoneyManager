@@ -1,6 +1,8 @@
 package user;
 
 import database.DatabaseWork;
+import org.bson.Document;
+import utils.PasswordEncrypting;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -16,7 +18,6 @@ public class UserInteraction {
         Authentication.auth();
     }
 
-    //TODO
     static void run() {
         String userEmail = Authentication.userEmail;
 
@@ -33,7 +34,6 @@ public class UserInteraction {
                     "8. Logout.\n"
             );
 
-            //temporary functionality
             try {
                 int option = scanner.nextInt();
 
@@ -71,7 +71,21 @@ public class UserInteraction {
                             System.out.println("\nAccount names aren't matching. No bank account was deleted.\n");
                         }
                     }
-                    case 7 -> System.out.println("option 7");
+                    case 7 -> {
+                        System.out.println("\nWARNING: You are going to delete your MoneyManager account!\n");
+                        System.out.println("Enter your email:");
+                        if (userEmail.equals(scanner.next())) {
+                            System.out.println("\nEnter your password:");
+                            String password = scanner.next();
+                            Document user = DatabaseWork.findUser(userEmail);
+                            assert user != null;
+                            if (PasswordEncrypting.verifyPassword(password, (String)user.get("password"))) {
+                                DatabaseWork.deleteUser(userEmail);
+                                exit();
+                            }
+                        }
+                        System.out.println("\nCouldn't delete your MoneyManager account.\n");
+                    }
                     case 8 -> exit();
                     default -> System.out.printf("\nOption %d doesn't exist. Try again.\n", option);
                 }
