@@ -148,6 +148,23 @@ public class DatabaseWork {
         System.out.printf("\nBank account %s with the amount of %f RON added successfully.\n", accountName, amount);
     }
 
-    //TODO
-    public static boolean deleteBankAccount(String userEmail, String accountName) { return false; }
+    public static void deleteBankAccount(String userEmail, String accountName) {
+        Document user = findUser(userEmail);
+        assert user != null;
+
+        Document accounts = (Document) user.get("accounts");
+
+        if (!accounts.containsKey(accountName)) {
+            System.out.printf("\nBank account %s doesn't exist.\n", accountName);
+            return;
+        }
+
+        accounts.remove(accountName);
+
+        mongo.getDatabase("money-manager")
+                .getCollection("users")
+                .updateOne(eq("email", userEmail), set("accounts", accounts));
+
+        System.out.printf("\nBank account %s was deleted successfully.\n", accountName);
+    }
 }
