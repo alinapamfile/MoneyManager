@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 public class UserInteraction {
     private static final Scanner scanner = new Scanner(System.in);
-    private static String userEmail;
 
     private UserInteraction() {}
 
@@ -18,7 +17,7 @@ public class UserInteraction {
 
     //TODO
     static void run() {
-        userEmail = Authentication.userEmail;
+        String userEmail = Authentication.userEmail;
 
         while (true) {
             sleep(2);
@@ -59,7 +58,16 @@ public class UserInteraction {
                     double amount = scanner.nextDouble();
                     DatabaseWork.addBankAccount(userEmail, accountName, amount);
                 }
-                case 6 -> System.out.println("option 6");
+                case 6 -> {
+                    System.out.println("Enter the name of the bank account you want to delete:");
+                    String accountName = scanner.next();
+                    System.out.println("Are you sure? Re-enter the name of the bank account you want to delete:");
+                    if (accountName.equals(scanner.next())) {
+                        DatabaseWork.deleteBankAccount(userEmail, accountName);
+                    } else {
+                        System.out.println("\nAccount names aren't matching. No bank account was deleted.\n");
+                    }
+                }
                 case 7 -> System.out.println("option 7");
                 case 8 -> exit();
             }
