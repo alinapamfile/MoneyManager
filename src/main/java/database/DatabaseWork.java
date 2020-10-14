@@ -45,9 +45,12 @@ public class DatabaseWork {
         return true;
     }
 
-    //TODO
-    public static boolean deleteUser(String userEmail) {
-        return false;
+    public static void deleteUser(String userEmail) {
+        mongo.getDatabase("money-manager")
+                .getCollection("users")
+                .deleteOne(eq("email", userEmail));
+
+        System.out.println("\nYour MoneyManager account was successfully deleted.\n");
     }
 
     public static void accountsBalance(String userEmail) {
