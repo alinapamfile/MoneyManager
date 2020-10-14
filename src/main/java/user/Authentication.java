@@ -22,11 +22,13 @@ public class Authentication {
             try {
                 int option = scanner.nextInt();
                 switch(option) {
-                    case 1 : register(); break;
-                    case 2 : login(); break;
+                    case 1 -> register();
+                    case 2 -> login();
+                    default -> System.out.printf("\nOption %d doesn't exist. Try again.\n", option);
                 }
             } catch (InputMismatchException e) {
                 System.out.println("\nTry again.\n");
+                scanner.next();
             }
         } while(true);
     }
